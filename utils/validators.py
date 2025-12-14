@@ -9,7 +9,7 @@ class Task(BaseModel):
     name: str = Field(..., min_length=1, max_length=200)
     due: Optional[str] = None        # ISO-date or None
     assignee: Optional[str] = None
-    prio: str = Field(default="medium", regex=r"^(high|medium|low)$")
+    prio: str = Field(default="medium", pattern=r"^(high|medium|low)$")
     vibe: str = Field(default="neutral")   # stressed / pumped / neutral
 
 
