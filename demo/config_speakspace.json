@@ -1,0 +1,11 @@
+{
+  "title": "Voice to Notion Tasks",
+  "description": "Transform voice notes into prioritized Notion action pages with AI-powered sentiment analysis. Automatically detects your stress level and adjusts task priorities accordingly.",
+  "prompt_template": "Extract actionable tasks from the following voice note. Analyze the emotional tone and assign priorities based on urgency. Voice note: [$PROMPT]",
+  "notes_selector": "single_note",
+  "api_url": "http://localhost:8000/process",
+  "authorization": {
+    "type": "bearer",
+    "token": "myhacktoken123"
+  }
+}

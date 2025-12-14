@@ -1,0 +1,24 @@
+{
+  "info": {
+    "name": "Voice to Notion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Process Voice",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer dummy-judges-token-change-for-prod"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"prompt\": \"Test voice: Finish hack by EOD, pumped!\", \"note_id\": \"test\", \"timestamp\": \"2025-12-10T10:00Z\"}"
+        },
+        "url": "{{base_url}}/process"
+      }
+    }
+  ],
+  "variable": [{"key": "base_url", "value": "http://localhost:8000"}]
+}
