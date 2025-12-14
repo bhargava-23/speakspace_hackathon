@@ -4,5 +4,4 @@ __pycache__/
 .vscode/
 .idea/
 .venv/
-data/*.json
 .pytest_cache/
