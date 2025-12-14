@@ -2,7 +2,7 @@
 
 ### **Team: DEADLY DUO**
 
-A fast, reliable system that transforms raw voice notes into structured, prioritized Notion pages. Designed specifically for the **SpeakSpace Hackathon**, this backend demonstrates emotional intelligence, real‑world usability, and strong engineering discipline.
+A fast, reliable system that transforms raw voice notes into structured, prioritized Notion pages. Designed specifically for the **SpeakSpace Hackathon**, this backend demonstrates emotional intelligence, real-world usability, and strong engineering discipline.
 
 ---
 
@@ -17,11 +17,11 @@ Our system fixes this.
 * Extracts actionable tasks from a voice note
 * Understands the user’s emotional tone (stressed / pumped / neutral)
 * Assigns priority automatically based on sentiment
-* Creates a well‑formatted Notion page with tasks, insights, and patterns
+* Creates a well-formatted Notion page with tasks, insights, and patterns
 * Provides trend analysis across notes
 * Ensures reliability with retries, guardrails, and idempotency
 
-This submission focuses on clarity, reliability, and judge‑friendly testing.
+This submission focuses on clarity, reliability, and judge-friendly testing.
 
 ---
 
@@ -35,7 +35,7 @@ SpeakSpace → Backend API → Groq LLaMA Extraction → Sentiment Analysis
 ### Key Components
 
 * **FastAPI** backend
-* **Groq LLaMA‑3.x** for high‑speed, accurate extraction
+* **Groq LLaMA-3.x** for high-speed, accurate extraction
 * **TextBlob** for sentiment analysis
 * **Notion API** for structured task creation
 * **Trend logging** for patterns
@@ -61,8 +61,6 @@ voice-to-notion/
 ├── data/                           # Created automatically at runtime
 └── .env.example
 ```
-
-The submission is intentionally lean and judge‑friendly.
 
 ---
 
@@ -169,7 +167,7 @@ Judges can plug this in directly:
   "title": "Voice to Notion Tasks",
   "description": "Convert voice notes into structured Notion action pages with sentiment-based priority.",
   "notes_selector": "single_note",
-  "api_url": "YOUR_DEPLOYED_URL/process",
+  "api_url": "https://deadly-duo-voice-notion-api.onrender.com/process",
   "authorization": {
     "type": "bearer",
     "token": "myhacktoken123"
@@ -177,19 +175,28 @@ Judges can plug this in directly:
 }
 ```
 
-Replace `YOUR_DEPLOYED_URL` with the Railway deployment URL.
-
 ---
 
-# **9. Deployment Instructions (Railway)**
+# **9. Deployment Instructions (Render)**
 
-1. Push repository to GitHub
-2. Create a new Railway project → Deploy from GitHub
-3. Add environment variables
-4. Deploy
-5. Copy public URL → use it in tests + SpeakSpace
+Our backend is deployed on **Render**.
 
-Deployment takes under 1 minute.
+### **How we deployed (for judge transparency):**
+
+1. Pushed GitHub repo
+2. Created a new Web Service on Render
+3. Added environment variables
+4. Render installed dependencies automatically
+5. Start command:
+
+   ```
+   uvicorn main:app --host 0.0.0.0 --port 10000
+   ```
+6. Deployment succeeded
+
+### **Live Production URL**
+
+## **[https://deadly-duo-voice-notion-api.onrender.com](https://deadly-duo-voice-notion-api.onrender.com)**
 
 ---
 
@@ -205,14 +212,14 @@ Deployment takes under 1 minute.
 
    * Extracted tasks
    * Priority colors
-   * Sentiment‑based insights
+   * Sentiment-based insights
    * Pattern analysis
    * Audit trail
 
 ### **Option B: Using curl or Postman**
 
 ```bash
-curl -X POST "YOUR_URL/process" \
+curl -X POST "https://deadly-duo-voice-notion-api.onrender.com/process" \
   -H "Authorization: Bearer myhacktoken123" \
   -H "Content-Type: application/json" \
   -d '{"prompt":"Deploy project tomorrow, stressed","note_id":"demo1","timestamp":"2025-12-10T10:00:00Z"}'
@@ -224,7 +231,7 @@ curl -X POST "YOUR_URL/process" \
 
 ### **Innovation**
 
-* Emotion‑aware task prioritization
+* Emotion-aware task prioritization
 * Automatic motivational insight generation
 * Pattern intelligence (stress/workload trends)
 * Ethical guardrails
@@ -247,11 +254,12 @@ curl -X POST "YOUR_URL/process" \
 
 # **12. Team**
 
-### **DEADLY DUO**-
--Bhargava krishna G,  -Hithesh M
+### **DEADLY DUO**
 
+* Bhargava Krishna G
+* Hithesh M
 
-Built with a focus on clarity, reliability, and real‑world usability.
+Built with a focus on clarity, reliability, and real-world usability.
 
 ---
 
