@@ -1,240 +1,262 @@
-# Voice to Notion – Sentiment-Aware Task Automation
+# **Voice-To-Notion: Emotion-Aware Task Automation for SpeakSpace**
 
-### SpeakSpace Annual Hackathon 2025 – Final Submission
+### **Team: DEADLY DUO**
 
-### Team: Deadly Duo
-
-
+A fast, reliable system that transforms raw voice notes into structured, prioritized Notion pages. Designed specifically for the **SpeakSpace Hackathon**, this backend demonstrates emotional intelligence, real‑world usability, and strong engineering discipline.
 
 ---
 
-## 1. Problem Statement
+# **1. Project Overview**
 
-Voice notes are one of the fastest ways to capture ideas, but they are also one of the least structured. Users often end up with:
+Voice notes are quick to record—but easy to lose, messy to search, and difficult to turn into action.
 
-* Unorganized voice memos
-* No clear action items
-* No prioritization
-* No follow-through
+Our system fixes this.
 
-Traditional transcription tools only convert speech to text. They do not extract tasks, infer deadlines, or understand urgency.
+### **What it does:**
 
----
+* Extracts actionable tasks from a voice note
+* Understands the user’s emotional tone (stressed / pumped / neutral)
+* Assigns priority automatically based on sentiment
+* Creates a well‑formatted Notion page with tasks, insights, and patterns
+* Provides trend analysis across notes
+* Ensures reliability with retries, guardrails, and idempotency
 
-## 2. Solution Overview
-
-**Voice to Notion** is a backend system that processes voice notes from SpeakSpace, analyzes their emotional context, extracts specific action items, and automatically creates a structured Notion page.
-
-Key innovations include:
-
-### • AI-Based Task Extraction
-
-Uses Groq (Llama-3.3-70B) to extract 3–5 tasks, summaries, and insights.
-
-### • Sentiment-Driven Prioritization
-
-The emotional tone influences urgency:
-
-* Negative tone → High priority
-* Positive tone → Low priority
-* Neutral tone → Medium priority
-
-### • Automated Notion Page Creation
-
-The system generates a Notion page with:
-
-* To-do tasks
-* Parsed deadlines
-* Insights informed by sentiment
-* A pattern analysis section based on historical entries
-
-### • Pattern Tracking
-
-Logs each processed note locally to identify long-term patterns such as stress frequency and workload trends.
+This submission focuses on clarity, reliability, and judge‑friendly testing.
 
 ---
 
-## 3. Architecture
+# **2. System Architecture**
 
 ```
-SpeakSpace App
-     |
-     | (prompt, note_id, timestamp)
-     ↓
-POST /process (FastAPI Backend)
-     |
-     |-- AI Task Extraction (Groq)
-     |-- Sentiment Scoring (TextBlob)
-     |-- Priority + Vibe Assignment
-     |-- Trend Logging (local JSON)
-     ↓
-Notion API – Page Creation
+SpeakSpace → Backend API → Groq LLaMA Extraction → Sentiment Analysis
+      → Notion Page Builder → Return page_url
 ```
+
+### Key Components
+
+* **FastAPI** backend
+* **Groq LLaMA‑3.x** for high‑speed, accurate extraction
+* **TextBlob** for sentiment analysis
+* **Notion API** for structured task creation
+* **Trend logging** for patterns
+* **Retry system + guardrails** for reliability
 
 ---
 
-## 4. Features
+# **3. Repository Structure**
 
-* Extracts tasks, deadlines, and assignees
-* Assigns priority levels using sentiment analysis
-* Creates structured Notion pages
-* Adds long-term insights based on historical logs
-* Privacy guardrails for sensitive content
-* Secured with bearer token authentication
+```
+voice-to-notion/
+│
+├── main.py                         # FastAPI server
+├── requirements.txt
+├── README.md
+│
+├── utils/
+│   ├── extraction.py               # Groq + sentiment + task logic
+│   ├── notion_builder.py           # Notion formatting + retries
+│   ├── trends.py                   # Patterns + idempotency
+│   └── validators.py               # Input validation + guardrails
+│
+├── data/                           # Created automatically at runtime
+└── .env.example
+```
+
+The submission is intentionally lean and judge‑friendly.
 
 ---
 
-## 5. Tech Stack
+# **4. Quick Setup (5 Minutes)**
 
-| Component            | Technology               |
-| -------------------- | ------------------------ |
-| AI Model             | Groq – Llama-3.3-70B     |
-| API Framework        | FastAPI                  |
-| Sentiment Analysis   | TextBlob                 |
-| Integration          | Notion API               |
-| Deployment           | Railway                  |
-| Validation & Logging | Pydantic, Python Logging |
+### **Install dependencies**
 
----
-
-## 6. API Usage
-
-### Endpoint
-
-```
-POST /process
+```bash
+pip install -r requirements.txt
 ```
 
-### Headers
+### **Create your `.env` file**
 
-```
-Authorization: Bearer <your_token>
-Content-Type: application/json
-```
-
-### Request Body
-
-```json
-{
-  "prompt": "Finish the project by tomorrow, feeling stressed about the deadline",
-  "note_id": "12345",
-  "timestamp": "2025-12-12T10:00:00Z"
-}
-```
-
-### Response
-
-```json
-{
-  "status": "success",
-  "message": "Workflow executed"
-}
-```
-
----
-
-## 7. SpeakSpace Integration
-
-### Steps:
-
-1. Deploy backend on Railway
-2. Copy production URL (e.g., `https://yourapp.up.railway.app/process`)
-3. Open SpeakSpace → Workflow Module → Custom Actions → Add New
-4. Fill in:
-
-   * API URL → your deployed `/process`
-   * Authorization → Bearer
-   * Token → same as `BEARER_TOKEN` in `.env`
-   * Prompt Template:
-
-     ```
-     {"prompt": "$PROMPT", "note_id": "$NOTE_ID", "timestamp": "$TIMESTAMP"}
-     ```
-   * Notes Selector: Single Note
-
-SpeakSpace will automatically send all required data.
-
----
-
-## 8. Environment Variables
+Copy `.env.example` → `.env` and fill:
 
 ```
 GROQ_API_KEY=your_key_here
-NOTION_TOKEN=your_notion_secret
+NOTION_TOKEN=your_notion_token
 NOTION_DATABASE_ID=your_database_id
 BEARER_TOKEN=myhacktoken123
 MAX_TASKS=5
 ```
 
+Judges can use their own credentials or our demo instructions.
+
 ---
 
-## 9. Running Locally
+# **5. Running Locally**
 
-```
-pip install -r requirements.txt
+```bash
 uvicorn main:app --reload
 ```
 
-Server runs at:
+Backend will start at:
 
 ```
 http://localhost:8000
 ```
 
-Interactive documentation:
+---
+
+# **6. API Specification**
+
+## **POST /process** — Main workflow
+
+### **Headers**
 
 ```
-http://localhost:8000/docs
+Authorization: Bearer myhacktoken123
+Content-Type: application/json
 ```
+
+### **Request body**
+
+```json
+{
+  "prompt": "Finish presentation by tomorrow, feeling stressed",
+  "note_id": "abc123",
+  "timestamp": "2025-12-10T12:00:00Z",
+  "speakspace_user_id": "user001"
+}
+```
+
+### **Response**
+
+```json
+{
+  "status": "success",
+  "message": "Workflow executed",
+  "page_url": "https://www.notion.so/..."
+}
+```
+
+Judges can click the `page_url` to immediately verify correctness.
 
 ---
 
-## 10. Deployment (Railway)
+# **7. Health Check**
 
-1. Push project to GitHub
-2. Create new Railway project → Deploy from GitHub
+## **GET /health**
+
+Returns environment + system readiness:
+
+```json
+{
+  "groq_key_loaded": true,
+  "notion_token_loaded": true,
+  "database_id_loaded": true,
+  "trends_file_write_access": true,
+  "version": "2.0.0"
+}
+```
+
+This allows judges to validate deployment instantly.
+
+---
+
+# **8. SpeakSpace Action Configuration**
+
+Judges can plug this in directly:
+
+```json
+{
+  "title": "Voice to Notion Tasks",
+  "description": "Convert voice notes into structured Notion action pages with sentiment-based priority.",
+  "notes_selector": "single_note",
+  "api_url": "YOUR_DEPLOYED_URL/process",
+  "authorization": {
+    "type": "bearer",
+    "token": "myhacktoken123"
+  }
+}
+```
+
+Replace `YOUR_DEPLOYED_URL` with the Railway deployment URL.
+
+---
+
+# **9. Deployment Instructions (Railway)**
+
+1. Push repository to GitHub
+2. Create a new Railway project → Deploy from GitHub
 3. Add environment variables
-4. Railway will run:
+4. Deploy
+5. Copy public URL → use it in tests + SpeakSpace
 
-```
-uvicorn main:app --host 0.0.0.0 --port $PORT
-```
-
-5. Use the public URL in SpeakSpace.
+Deployment takes under 1 minute.
 
 ---
 
-## 11. Why This Project Stands Out
+# **10. How Judges Can Test the System**
 
-* Converts emotional, unstructured voice notes into structured task plans
-* Introduces sentiment-aware prioritization not commonly seen in productivity tools
-* Provides complete automation between SpeakSpace, backend, AI extraction, and Notion
-* Fast, reliable, and designed for real-world scalability
-* Clear, maintainable architecture suitable for production
+### **Option A: Using SpeakSpace**
 
----
+1. Add the custom action
+2. Record a voice note
+3. Select “Voice to Notion Tasks”
+4. Open the Notion database
+5. A new page appears with:
 
-## 12. Folder Structure
+   * Extracted tasks
+   * Priority colors
+   * Sentiment‑based insights
+   * Pattern analysis
+   * Audit trail
 
-```
-voice-to-notion/
-│
-├── main.py
-├── utils/
-│   ├── extraction.py
-│   ├── notion_builder.py
-│   ├── validators.py
-│   ├── trends.py
-│
-├── data/trends.json
-├── deployment/
-├── demo/
-├── requirements.txt
-└── README.md
+### **Option B: Using curl or Postman**
+
+```bash
+curl -X POST "YOUR_URL/process" \
+  -H "Authorization: Bearer myhacktoken123" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"Deploy project tomorrow, stressed","note_id":"demo1","timestamp":"2025-12-10T10:00:00Z"}'
 ```
 
 ---
 
-## 13. Conclusion
+# **11. Why This Project Stands Out**
 
-This project demonstrates how voice input, emotional intelligence, and automation can work together to streamline productivity. The system produces structured Notion pages from natural voice notes while understanding the user's tone and urgency, offering meaningful value beyond simple transcription.
+### **Innovation**
+
+* Emotion‑aware task prioritization
+* Automatic motivational insight generation
+* Pattern intelligence (stress/workload trends)
+* Ethical guardrails
+
+### **Execution Quality**
+
+* Clean architecture
+* Strong validation
+* Idempotent & reliable
+* Retry logic for all Notion operations
+
+### **Judge Convenience**
+
+* Ready-to-test API
+* Clear endpoints
+* Health diagnostics
+* Minimal setup
+
+---
+
+# **12. Team**
+
+### **DEADLY DUO**-
+-Bhargava krishna G,  -Hithesh M
+
+
+Built with a focus on clarity, reliability, and real‑world usability.
+
+---
+
+# **13. Closing Note**
+
+This system demonstrates how voice interfaces can become **intelligent productivity engines** when combined with emotional understanding and structured automation.
+
+Thank you for reviewing our submission.
